@@ -12,7 +12,7 @@ router.put('/edit-profile',userTokenVerify,upload.single('image'),editProfile)
 router.post('/admin',adminLogin)
 router.post('/add-user',adminTokenVerify,upload.single('image'),adminAddUser) 
 router.get('/dashboard',adminTokenVerify,adminUsers)
-router.put('/dashboard/edit-user/:id',adminEditUser)
+// router.put('/dashboard/edit-user/:id',adminEditUser)
 router.delete('/dashboard/remove-user/:id',adminTokenVerify,adminDeleteUser)
 
 
