@@ -24,9 +24,11 @@ const Navbar = () => {
             try {
                 const result = await fetchUserProfile();
                 dispatch(fetchProfile(result.user));
-                dispatch(pfpChange(result.user.profileImage));
+                dispatch(pfpChange(result.url));
+                console.log(result.user.url)
             } catch (error) {
-                console.error("Error fetching users:", error.message);
+                navigate('/login')
+                console.error("Error fetching user:", error.message);
             }
         };
 

@@ -20,7 +20,7 @@ const UserProfile = () => {
                 <div className="card-body">
                     <FaEdit className='edit' onClick={() => setShowEdit(true)} />
                     <div className="flex-shrink-0">
-                        <img src={profileImg ? `http://localhost:3001/uploads/${profileImg}` :'https://via.placeholder.com/150'} alt="Profile" className="h-40 w-40 rounded-full border-4 border-white" />
+                        <img src={profileImg ? profileImg :'https://via.placeholder.com/150'} alt="Profile" className="h-40 w-40 rounded-full border-4 border-white" />
                     </div>
                     <table>
                         <tbody>

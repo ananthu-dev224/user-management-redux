@@ -35,7 +35,7 @@ const EditProfile = ({ setShowEdit }) => {
         try {
             const updatedProfile = await editUserProfile(formData);
             dispatch(fetchProfile(updatedProfile.userData))
-            dispatch(pfpChange(updatedProfile.userData.profileImage))
+            dispatch(pfpChange(updatedProfile.url))
             setShowEdit(false);
             toast.success('Profile updated successfully');
         } catch (error) {
@@ -58,7 +58,7 @@ const EditProfile = ({ setShowEdit }) => {
                     </button>
                     <h2 className="text-2xl font-bold mb-6 text-center">Edit Profile</h2>
                     <div className="flex justify-center mb-6">
-                        <img src={image ? URL.createObjectURL(image) : `http://localhost:3001/uploads/${profileImg}` || 'https://via.placeholder.com/150'}  className="h-40 w-40 rounded-full border-4 border-white" />
+                        <img src={image ? URL.createObjectURL(image) : profileImg || 'https://via.placeholder.com/150'}  className="h-40 w-40 rounded-full border-4 border-white" />
                     </div>
                     <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">

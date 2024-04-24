@@ -46,6 +46,7 @@ export const editUserProfile = async (userData) => {
     } catch (error) {
         if (error.response) {
             toast.error(error.response.data.info);
+            localStorage.removeItem('userToken')
           } else {
             toast.error('An unexpected error occurred. Please try again later.');
           }
@@ -65,6 +66,7 @@ export const fetchUserProfile = async () => {
         return response.data;
     } catch (error) {
         if (error.response) {
+            localStorage.removeItem('userToken')
             toast.error(error.response.data.info);
           } else {
             toast.error('An unexpected error occurred. Please try again later.');

@@ -31,6 +31,7 @@ export const deleteUser = async (userId) => {
     } catch (error) {
         if (error.response) {
             toast.error(error.response.data.info);
+            localStorage.removeItem('adminToken')
         } else {
             toast.error('An unexpected error occurred. Please try again later.');
         }
@@ -49,6 +50,7 @@ export const addUser = async (userData) => {
     } catch (error) {
         if (error.response) {
             toast.error(error.response.info);
+            localStorage.removeItem('adminToken')
         } else {
             toast.error('An unexpected error occurred. Please try again later.');
         }
@@ -68,6 +70,7 @@ export const getUsers = async () => {
     } catch (error) {
         if (error.response) {
             toast.error(error.response.data.info);
+            localStorage.removeItem('adminToken')
         } else {
             toast.error('An unexpected error occurred. Please try again later.');
         }
@@ -81,6 +84,7 @@ export const editUser = async (userData) => {
     } catch (error) {
         if (error.response) {
             toast.error(error.response.data.info);
+            localStorage.removeItem('adminToken')
         } else {
             toast.error('An unexpected error occurred. Please try again later.');
         }
