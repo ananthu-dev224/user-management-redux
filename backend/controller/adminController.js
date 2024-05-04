@@ -36,21 +36,28 @@ const adminUsers = async (req, res) => {
 
 const adminEditUser = async (req, res) => {
     try {
-        const userId = req.params.userId;
+        const userId = req.body.id;
         const user = await userdb.findById(userId)
 
         if (!user) {
             return res.status(400).json({ info: 'User not available' })
         }
 
-        const { userData } = req.body;
-        const newEmail = userData.email;
-        const existingEmail = await userdb.findOne({ email: newEmail })
-        if (existingEmail && existingEmail._id.toString() !== userId) {
-            return res.status(400).json({ info: 'Email already exists' })
+        const { username, email, phone } = req.body;
+        const update = {}
+        if (email !== '') {
+            const newEmail = email;
+            const existingEmail = await userdb.findOne({ email: newEmail })
+            if (existingEmail && existingEmail._id.toString() !== userId) {
+                return res.status(400).json({ info: 'Email already exists' })
+            }
+            update.email = email
+        }else if(username !== ''){
+            update.username = username
+        }else if (phone !== ''){
+            update.phone = phone
         }
-
-        await userdb.findByIdAndUpdate(userId, userData)
+        await userdb.findByIdAndUpdate(userId, update)
         res.status(200).json({ info: 'User Edited Successfully' })
 
     } catch (error) {
@@ -64,7 +71,7 @@ const adminDeleteUser = async (req, res) => {
     try {
         const userId = req.params.id
         await userdb.findByIdAndDelete(userId);
-        res.status(200).json({ userId})
+        res.status(200).json({ userId })
     } catch (error) {
         console.log("An error occured while deleting a user", error.message);
         res.status(500).json({ info: 'An error occured' })
@@ -73,26 +80,26 @@ const adminDeleteUser = async (req, res) => {
 
 const adminAddUser = async (req, res) => {
     try {
-        const {name,email,phone,password} = req.body;
-        const  profileImage = req.file.filename;
-        
-        const existingEmail = await userdb.findOne({email:email})
-        if(existingEmail){
-            return res.status(400).json({info:'Email already exists'})
+        const { name, email, phone, password } = req.body;
+        const profileImage = req.file.filename;
+
+        const existingEmail = await userdb.findOne({ email: email })
+        if (existingEmail) {
+            return res.status(400).json({ info: 'Email already exists' })
         }
         const saltrounds = 10
-        const hashedPassword = await bcrypt.hash(password,saltrounds);
+        const hashedPassword = await bcrypt.hash(password, saltrounds);
 
         const newUser = new userdb({
-            username:name,
-            email:email,
-            phone:phone,
-            password:hashedPassword,
-            profileImage:profileImage,
+            username: name,
+            email: email,
+            phone: phone,
+            password: hashedPassword,
+            profileImage: profileImage,
 
         })
         await newUser.save()
-        res.status(200).json({info:'User created successfully!',newUser})
+        res.status(200).json({ info: 'User created successfully!', newUser })
 
     } catch (error) {
         console.log("An error occured while adding a user by admin", error.message);

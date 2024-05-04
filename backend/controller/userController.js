@@ -76,13 +76,18 @@ const signup = async (req, res) => {
 const fetchUser = async (req, res) => {
     try {
         const user = req.user
-        const getImageParams = {
-            Bucket: bucketName,
-            Key: user.profileImage,
+        if(user.profileImage){
+            const getImageParams = {
+                Bucket: bucketName,
+                Key: user.profileImage,
+            }
+            const command = new GetObjectCommand(getImageParams)
+            const url = await getSignedUrl(s3, command, { expiresIn: 100000 })
+            res.status(200).json({ user, url })
+        }else{
+            res.status(200).json({ user })
         }
-        const command = new GetObjectCommand(getImageParams)
-        const url = await getSignedUrl(s3, command, { expiresIn: 100000 })
-        res.status(200).json({ user, url })
+        
     } catch (error) {
         console.log("An error occured at fetch User", error.message);
         res.status(500).json({ info: 'An error occured' })

@@ -22,10 +22,11 @@ export const loginAdmin = async (adminData) => {
 export const deleteUser = async (userId) => {
     try {
         const adminToken = localStorage.getItem('adminToken')
-        await api.delete(`/dashboard/remove-user/${userId}`,{
+        await api.delete(`/dashboard/remove-user/${userId}`, {
             headers: {
-            'Authorization': `${adminToken}`
-        }}
+                'Authorization': `${adminToken}`
+            }
+        }
         );
         return userId;
     } catch (error) {
@@ -79,7 +80,12 @@ export const getUsers = async () => {
 
 export const editUser = async (userData) => {
     try {
-        const response = await api.put(`/dashboard/edit-user/${userData.id}`, userData);
+        const adminToken = localStorage.getItem('adminToken')
+        const response = await api.put('/dashboard/edit-user', userData, {
+            headers: {
+                'Authorization': `${adminToken}`
+            }
+        });
         return response.data;
     } catch (error) {
         if (error.response) {

@@ -5,11 +5,14 @@ import { useNavigate } from 'react-router-dom/dist/umd/react-router-dom.developm
 import { getUsers, deleteUser } from '../services/adminServices';
 import { fetchUsers, deleteUserState } from '../app/adminSlice';
 
+import Edituser from './EditUser';
 
 const Table = () => {
   const [allUsers, setAllUsers] = useState([])
   const [prefix, setPrefix] = useState('')
   const [change, setChange] = useState(false)
+  const [editUser,setEditUser] = useState(null)
+  const [isEditOpen, setIsEditOpen] = useState(false);
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const { users } = useSelector((state) => state.admin)
@@ -30,10 +33,9 @@ const Table = () => {
     };
 
     fetchData();
-  }, [change])
+  }, [change,isEditOpen])
 
   useEffect(() => {
-    console.log(prefix);
     const regex = new RegExp(`^${prefix}`, "i")
     const filteredUser = users.filter((user) => regex.test(user.username))
     setAllUsers(filteredUser)
@@ -50,6 +52,14 @@ const Table = () => {
       toast.error('An error occured')
       console.error('An error occured in delete', error.message)
     }
+  }
+
+  const handleEditClick = (userId) => {
+    const user = users.filter((user) => 
+      user._id.toString() === userId.toString()
+    )
+    setEditUser(user)
+    setIsEditOpen(true)
   }
 
   return (
@@ -110,7 +120,8 @@ const Table = () => {
                         <td className="px-6 py-4 whitespace-nowrap">{user.email}</td>
                         <td className="px-6 py-4 whitespace-nowrap">{user.phone}</td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <button className="text-indigo-600 hover:text-indigo-900">Edit</button>
+                          <button className="text-indigo-600 hover:text-indigo-900" onClick={() => handleEditClick(user._id)}>Edit</button>
+                          <Edituser isOpen={isEditOpen} toggleEdit={() => setIsEditOpen(!isEditOpen)} user={editUser} />
                           <button className="text-red-600 hover:text-red-900 ml-2" onClick={() => handleDelete(user._id)}>Delete</button>
                         </td>
                       </tr>
